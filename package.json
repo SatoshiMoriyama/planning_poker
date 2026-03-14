@@ -1,6 +1,11 @@
 {
   "name": "planning-poker",
   "private": true,
+  "scripts": {
+    "dev": "pnpm --filter @planning-poker/frontend dev",
+    "cdk:deploy": "pnpm --filter planning-poker-infra cdk deploy",
+    "cdk:diff": "pnpm --filter planning-poker-infra cdk diff"
+  },
   "devDependencies": {
     "typescript": "^5.7.0"
   }
