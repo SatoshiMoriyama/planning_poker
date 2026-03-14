@@ -1,7 +1,7 @@
 import { useParams, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { RoomView } from '../../features/room/components/room-view';
-
-const WS_URL = import.meta.env.VITE_WS_URL as string | undefined;
+import { getConfig } from '../../shared/lib/config';
 
 export default function RoomRoute() {
   const { roomId } = useParams<{ roomId: string }>();
@@ -9,6 +9,15 @@ export default function RoomRoute() {
   const state = location.state as { userName?: string; mode?: 'create' | 'join' } | null;
   const userName = state?.userName;
   const mode = state?.mode;
+
+  const [wsUrl, setWsUrl] = useState<string | null>(null);
+  const [configError, setConfigError] = useState(false);
+
+  useEffect(() => {
+    getConfig()
+      .then((config) => setWsUrl(config.wsUrl))
+      .catch(() => setConfigError(true));
+  }, []);
 
   if (!roomId) {
     throw new Error('roomId is required');
@@ -22,9 +31,13 @@ export default function RoomRoute() {
     throw new Error('mode is required');
   }
 
-  if (!WS_URL) {
-    return <p className="text-red-600 p-8">WebSocket URL が設定されていません（VITE_WS_URL）</p>;
+  if (configError) {
+    return <p className="text-red-600 p-8">WebSocket URL が設定されていません</p>;
   }
 
-  return <RoomView roomId={roomId} wsUrl={WS_URL} userName={userName} mode={mode} />;
+  if (!wsUrl) {
+    return <p className="p-8">読み込み中...</p>;
+  }
+
+  return <RoomView roomId={roomId} wsUrl={wsUrl} userName={userName} mode={mode} />;
 }

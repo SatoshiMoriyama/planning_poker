@@ -136,6 +136,18 @@ export class PlanningPokerStack extends cdk.Stack {
       distributionPaths: ['/*'],
     });
 
+    // config.json をデプロイ（WebSocket URL をフロントエンドに渡す）
+    new s3deploy.BucketDeployment(this, 'DeployConfig', {
+      sources: [
+        s3deploy.Source.jsonData('config.json', {
+          wsUrl: webSocketStage.url,
+        }),
+      ],
+      destinationBucket: websiteBucket,
+      distribution,
+      distributionPaths: ['/config.json'],
+    });
+
     // --- Outputs ---
     new cdk.CfnOutput(this, 'WebSocketUrl', {
       value: webSocketStage.url,

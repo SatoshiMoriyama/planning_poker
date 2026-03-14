@@ -24,6 +24,7 @@ export function useWebSocket(url: string): UseWebSocketReturn {
 
     client.onOpen = () => {
       setStatus('connected');
+      setError(null);
     };
 
     client.onClose = () => {
