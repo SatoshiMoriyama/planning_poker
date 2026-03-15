@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --filter @planning-poker/frontend dev",
+    "build": "pnpm --filter @planning-poker/frontend build",
+    "deploy": "pnpm build && pnpm cdk:deploy",
     "cdk:deploy": "pnpm --filter planning-poker-infra cdk deploy",
     "cdk:diff": "pnpm --filter planning-poker-infra cdk diff"
   },
