@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { AppLayout } from '../app-layout';
 import { APP_NAME } from '../constants';
 
@@ -7,9 +8,11 @@ describe('AppLayout', () => {
   it('should render header, main content, and footer', () => {
     // Given / When
     render(
-      <AppLayout>
-        <p>Page Content</p>
-      </AppLayout>,
+      <MemoryRouter>
+        <AppLayout>
+          <p>Page Content</p>
+        </AppLayout>
+      </MemoryRouter>,
     );
 
     // Then
@@ -22,9 +25,11 @@ describe('AppLayout', () => {
   it('should render app name in both header and footer', () => {
     // Given / When
     render(
-      <AppLayout>
-        <p>Content</p>
-      </AppLayout>,
+      <MemoryRouter>
+        <AppLayout>
+          <p>Content</p>
+        </AppLayout>
+      </MemoryRouter>,
     );
 
     // Then
@@ -35,12 +40,14 @@ describe('AppLayout', () => {
   it('should pass headerCenter and headerRight to the header', () => {
     // Given / When
     render(
-      <AppLayout
-        headerCenter={<span>Center</span>}
-        headerRight={<span>Right</span>}
-      >
-        <p>Content</p>
-      </AppLayout>,
+      <MemoryRouter>
+        <AppLayout
+          headerCenter={<span>Center</span>}
+          headerRight={<span>Right</span>}
+        >
+          <p>Content</p>
+        </AppLayout>
+      </MemoryRouter>,
     );
 
     // Then
