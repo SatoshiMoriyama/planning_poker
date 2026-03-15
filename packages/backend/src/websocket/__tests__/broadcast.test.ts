@@ -35,7 +35,7 @@ function createRoomFixture(
 
 function createGoneError(): Error {
   const error = new Error('Gone');
-  (error as Error & { statusCode: number }).statusCode = 410;
+  error.name = 'GoneException';
   return error;
 }
 

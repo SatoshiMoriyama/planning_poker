@@ -139,7 +139,7 @@ describe('ParticipantsList', () => {
 
       // Then
       const hostItem = screen.getByTestId('participant-conn-host');
-      expect(hostItem.className).toContain('border-blue');
+      expect(hostItem.className).toContain('ring-primary');
     });
   });
 

@@ -31,7 +31,7 @@ describe('HostControls', () => {
       expect(onReveal).toHaveBeenCalledOnce();
     });
 
-    it('should not show reset button during voting', () => {
+    it('should show reset button during voting', () => {
       // Given
       const onReveal = vi.fn();
       const onReset = vi.fn();
@@ -40,7 +40,7 @@ describe('HostControls', () => {
       render(<HostControls status="voting" onReveal={onReveal} onReset={onReset} />);
 
       // Then
-      expect(screen.queryByRole('button', { name: /リセット/ })).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /リセット/ })).toBeInTheDocument();
     });
   });
 
@@ -71,7 +71,7 @@ describe('HostControls', () => {
       expect(onReset).toHaveBeenCalledOnce();
     });
 
-    it('should not show reveal button after reveal', () => {
+    it('should show reveal button after reveal', () => {
       // Given
       const onReveal = vi.fn();
       const onReset = vi.fn();
@@ -80,7 +80,7 @@ describe('HostControls', () => {
       render(<HostControls status="revealed" onReveal={onReveal} onReset={onReset} />);
 
       // Then
-      expect(screen.queryByRole('button', { name: /公開/ })).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /公開/ })).toBeInTheDocument();
     });
   });
 });
