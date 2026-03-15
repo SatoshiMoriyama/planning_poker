@@ -18,9 +18,9 @@ export function CardSelector({ onSelect, disabled, selectedCard }: CardSelectorP
           onClick={() => onSelect(value)}
           variant={value === selectedCard ? 'default' : 'outline'}
           size="lg"
-          className={`w-12 h-14 text-lg font-bold transition-all duration-200 ${value === selectedCard
-              ? 'scale-105 -translate-y-1 shadow-lg'
-              : 'hover:-translate-y-1 hover:shadow-md'
+          className={`w-16 h-20 text-xl font-bold transition-all duration-200 ${value === selectedCard
+            ? 'scale-105 -translate-y-1 shadow-lg'
+            : 'hover:-translate-y-1 hover:shadow-md'
             }`}
         >
           {value}
