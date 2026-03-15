@@ -51,6 +51,13 @@ function viewReducer(state: RoomState, action: ViewAction): RoomState {
         vote: null,
       });
     }
+    // 自分自身も参加者に追加
+    participants.set(action.you.connectionId, {
+      connectionId: action.you.connectionId,
+      userName: action.you.userName,
+      hasVoted: false,
+      vote: null,
+    });
     return {
       ...state,
       roomId: action.roomId,
@@ -172,15 +179,13 @@ export function RoomView({ roomId, wsUrl, userName, mode }: RoomViewProps) {
         />
       </section>
 
-      {state.isHost && (
-        <section>
-          <HostControls
-            status={state.status}
-            onReveal={handleReveal}
-            onReset={handleReset}
-          />
-        </section>
-      )}
+      <section>
+        <HostControls
+          status={state.status}
+          onReveal={handleReveal}
+          onReset={handleReset}
+        />
+      </section>
 
       {state.status === 'revealed' && (
         <section>

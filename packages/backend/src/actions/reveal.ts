@@ -9,10 +9,6 @@ export async function reveal(
   const { connection, room } =
     await requireConnectionAndRoom(connectionId);
 
-  if (room.hostConnectionId !== connectionId) {
-    throw new UserFacingError('Only the host can reveal votes');
-  }
-
   if (room.status === 'revealed') {
     throw new UserFacingError('Room is already revealed');
   }
