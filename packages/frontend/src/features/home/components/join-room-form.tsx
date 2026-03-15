@@ -1,4 +1,7 @@
 import { type FormEvent, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface JoinRoomFormProps {
   onSubmit: (data: { userName: string; roomId: string }) => void;
@@ -18,36 +21,29 @@ export function JoinRoomForm({ onSubmit }: JoinRoomFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label htmlFor="join-userName" className="block text-sm font-medium text-gray-700">
-          ユーザー名
-        </label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="join-userName">ユーザー名</Label>
+        <Input
           id="join-userName"
           type="text"
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          placeholder="名前を入力"
         />
       </div>
-      <div>
-        <label htmlFor="join-roomId" className="block text-sm font-medium text-gray-700">
-          ルームID
-        </label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="join-roomId">ルームID</Label>
+        <Input
           id="join-roomId"
           type="text"
           value={roomId}
           onChange={(e) => setRoomId(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          placeholder="ルームIDを入力"
         />
       </div>
-      <button
-        type="submit"
-        className="w-full px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700"
-      >
+      <Button type="submit" variant="secondary" className="w-full">
         参加
-      </button>
+      </Button>
     </form>
   );
 }

@@ -1,4 +1,7 @@
 import { type FormEvent, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface CreateRoomFormProps {
   onSubmit: (data: { userName: string }) => void;
@@ -16,24 +19,19 @@ export function CreateRoomForm({ onSubmit }: CreateRoomFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label htmlFor="create-userName" className="block text-sm font-medium text-gray-700">
-          ユーザー名
-        </label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="create-userName">ユーザー名</Label>
+        <Input
           id="create-userName"
           type="text"
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          placeholder="名前を入力"
         />
       </div>
-      <button
-        type="submit"
-        className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
-      >
+      <Button type="submit" className="w-full">
         ルーム作成
-      </button>
+      </Button>
     </form>
   );
 }
