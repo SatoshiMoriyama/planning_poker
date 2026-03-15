@@ -7,6 +7,7 @@ import { CardSelector } from './card-selector';
 import { ParticipantsList } from './participants-list';
 import { VotingResult } from './voting-result';
 import { HostControls } from './host-controls';
+import { InviteLink } from './invite-link';
 
 interface RoomViewProps {
   roomId: string;
@@ -144,6 +145,8 @@ export function RoomView({ roomId, wsUrl, userName, mode }: RoomViewProps) {
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       <h1 className="text-2xl font-bold">ルーム: {state.roomId}</h1>
+
+      {state.roomId && <InviteLink roomId={state.roomId} />}
 
       {wsError !== null && (
         <div role="alert" className="p-4 bg-red-50 border border-red-300 rounded-lg text-red-700">
