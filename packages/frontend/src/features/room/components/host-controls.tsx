@@ -1,4 +1,5 @@
 import type { RoomStatus } from '../../../shared/lib/types';
+import { Button } from '@/components/ui/button';
 
 interface HostControlsProps {
   status: RoomStatus;
@@ -9,22 +10,12 @@ interface HostControlsProps {
 export function HostControls({ status, onReveal, onReset }: HostControlsProps) {
   return (
     <div className="flex gap-2">
-      <button
-        type="button"
-        onClick={onReveal}
-        disabled={false}
-        className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
+      <Button onClick={onReveal} disabled={false}>
         公開
-      </button>
-      <button
-        type="button"
-        onClick={onReset}
-        disabled={false}
-        className="px-6 py-2 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
+      </Button>
+      <Button onClick={onReset} disabled={false} variant="secondary">
         リセット
-      </button>
+      </Button>
     </div>
   );
 }

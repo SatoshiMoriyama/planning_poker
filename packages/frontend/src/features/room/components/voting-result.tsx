@@ -1,4 +1,5 @@
 import type { RevealedParticipant } from '../../../shared/lib/types';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface VotingResultProps {
   participants: RevealedParticipant[];
@@ -11,19 +12,20 @@ export function VotingResult({ participants, average }: VotingResultProps) {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="text-center">
-        <p className="text-sm text-gray-500">平均</p>
-        <p className="text-3xl font-bold">{average !== null ? average : '-'}</p>
-      </div>
-      <ul className="space-y-1">
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-center">
+          平均: <span className="text-2xl">{average !== null ? average : '-'}</span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-1">
         {participants.map((p) => (
-          <li key={p.connectionId} className="flex justify-between items-center p-2">
-            <span>{p.userName}</span>
+          <div key={p.connectionId} className="flex justify-between items-center py-1.5 border-b last:border-0">
+            <span className="text-sm">{p.userName}</span>
             <span className="font-bold">{p.vote !== null ? p.vote : '-'}</span>
-          </li>
+          </div>
         ))}
-      </ul>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

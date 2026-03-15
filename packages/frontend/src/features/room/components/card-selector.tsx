@@ -1,4 +1,5 @@
 import { CARD_VALUES } from '../../../shared/lib/types';
+import { Button } from '@/components/ui/button';
 
 interface CardSelectorProps {
   onSelect: (value: string) => void;
@@ -10,20 +11,20 @@ export function CardSelector({ onSelect, disabled, selectedCard }: CardSelectorP
   return (
     <div className="flex flex-wrap gap-2">
       {CARD_VALUES.map((value) => (
-        <button
+        <Button
           key={value}
-          type="button"
           disabled={disabled}
           aria-pressed={value === selectedCard ? 'true' : 'false'}
           onClick={() => onSelect(value)}
-          className={`px-4 py-3 rounded-lg border-2 font-bold text-lg transition-colors ${
-            value === selectedCard
-              ? 'border-blue-600 bg-blue-100 text-blue-800'
-              : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
-          } disabled:opacity-50 disabled:cursor-not-allowed`}
+          variant={value === selectedCard ? 'default' : 'outline'}
+          size="lg"
+          className={`w-12 h-14 text-lg font-bold transition-all duration-200 ${value === selectedCard
+              ? 'scale-105 -translate-y-1 shadow-lg'
+              : 'hover:-translate-y-1 hover:shadow-md'
+            }`}
         >
           {value}
-        </button>
+        </Button>
       ))}
     </div>
   );

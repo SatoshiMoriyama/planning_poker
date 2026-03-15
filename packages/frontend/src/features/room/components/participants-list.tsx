@@ -1,4 +1,7 @@
 import type { RoomStatus } from '../../../shared/lib/types';
+import { Card } from '@/components/ui/card';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 
 interface ParticipantDisplay {
   connectionId: string;
@@ -21,24 +24,30 @@ export function ParticipantsList({ participants, status, myConnectionId }: Parti
         const revealed = status === 'revealed' && p.hasVoted && p.vote !== null;
 
         return (
-          <div
+          <Card
             key={p.connectionId}
             data-testid={`participant-${p.connectionId}`}
             data-voted={String(p.hasVoted)}
-            className={`flex flex-col items-center justify-center w-20 h-24 rounded-lg border-2 font-bold text-lg transition-colors ${isMe
-                ? 'border-blue-600 bg-blue-50'
-                : p.hasVoted
-                  ? 'border-green-400 bg-green-50'
-                  : 'border-gray-300 bg-white'
+            size="sm"
+            className={`w-24 items-center py-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${isMe ? 'ring-2 ring-primary' : ''
               }`}
           >
-            <span className="text-2xl mb-1">
-              {revealed ? p.vote : p.hasVoted ? '✔' : '—'}
-            </span>
-            <span className="text-xs text-gray-600 truncate max-w-[4.5rem] text-center">
-              {p.userName}{isMe ? ' (あなた)' : ''}
-            </span>
-          </div>
+            <Avatar size="lg">
+              <AvatarFallback>
+                {revealed ? p.vote : p.hasVoted ? '✔' : p.userName.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col items-center gap-1 px-2">
+              <span className="text-xs truncate max-w-20 text-center">
+                {p.userName}{isMe ? ' (あなた)' : ''}
+              </span>
+              {status === 'voting' && (
+                <Badge variant={p.hasVoted ? 'default' : 'secondary'}>
+                  {p.hasVoted ? '済' : '未'}
+                </Badge>
+              )}
+            </div>
+          </Card>
         );
       })}
     </div>
