@@ -6,6 +6,19 @@ interface VotingResultProps {
   average: number | null;
 }
 
+function AverageDisplay({ average }: { average: number }) {
+  const rounded = Math.round(average);
+  if (Number.isInteger(average)) {
+    return <span className="text-3xl font-bold">{rounded}</span>;
+  }
+  return (
+    <>
+      <span className="text-3xl font-bold">{rounded}</span>
+      <span className="text-sm text-muted-foreground ml-1">({average.toFixed(1)})</span>
+    </>
+  );
+}
+
 export function VotingResult({ participants, average }: VotingResultProps) {
   if (participants.length === 0) {
     return null;
@@ -14,8 +27,8 @@ export function VotingResult({ participants, average }: VotingResultProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-center">
-          平均: <span className="text-2xl">{average !== null ? average : '-'}</span>
+        <CardTitle className="text-center flex items-baseline justify-center gap-1">
+          平均: {average !== null ? <AverageDisplay average={average} /> : '-'}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-1">
