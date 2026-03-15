@@ -14,6 +14,7 @@ interface RoomViewProps {
   wsUrl: string;
   userName: string;
   mode: 'create' | 'join';
+  onConnectionStatusChange: (status: 'connected' | 'disconnected' | 'connecting') => void;
 }
 
 type RoomCreatedAction = Extract<ServerMessage, { type: 'roomCreated' }>;
@@ -84,9 +85,13 @@ function createInitialState(roomId: string): RoomState {
   };
 }
 
-export function RoomView({ roomId, wsUrl, userName, mode }: RoomViewProps) {
+export function RoomView({ roomId, wsUrl, userName, mode, onConnectionStatusChange }: RoomViewProps) {
   const navigate = useNavigate();
   const { status: wsStatus, lastMessage, error: wsError, connect, send } = useWebSocket(wsUrl);
+
+  useEffect(() => {
+    onConnectionStatusChange(wsStatus);
+  }, [wsStatus, onConnectionStatusChange]);
   const [state, dispatch] = useReducer(viewReducer, roomId, createInitialState);
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
   // roomCreated後のnavigate→useEffect再発火で二重送信されるのを防止
@@ -151,8 +156,6 @@ export function RoomView({ roomId, wsUrl, userName, mode }: RoomViewProps) {
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
-      <h1 className="text-2xl font-bold">ルーム: {state.roomId}</h1>
-
       {state.roomId && <InviteLink roomId={state.roomId} />}
 
       {wsError !== null && (

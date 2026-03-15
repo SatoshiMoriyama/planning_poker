@@ -16,7 +16,6 @@ export function HomeView() {
 
   return (
     <div className="max-w-md mx-auto p-8 space-y-8">
-      <h1 className="text-3xl font-bold text-center">プランニングポーカー</h1>
       <section>
         <h2 className="text-xl font-semibold mb-4">ルーム作成</h2>
         <CreateRoomForm onSubmit={handleCreateRoom} />

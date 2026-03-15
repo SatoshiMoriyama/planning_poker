@@ -1,5 +1,10 @@
+import { AppLayout } from '../../components/layout/app-layout';
 import { HomeView } from '../../features/home/components/home-view';
 
 export default function HomeRoute() {
-  return <HomeView />;
+  return (
+    <AppLayout>
+      <HomeView />
+    </AppLayout>
+  );
 }
