@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
+import { AppLayout } from '../../components/layout/app-layout';
 import { JoinView } from '../../features/join/components/join-view';
 
 export default function JoinRoute() {
@@ -17,5 +18,9 @@ export default function JoinRoute() {
     [navigate, roomId],
   );
 
-  return <JoinView roomId={roomId} onSubmit={handleSubmit} />;
+  return (
+    <AppLayout>
+      <JoinView roomId={roomId} onSubmit={handleSubmit} />
+    </AppLayout>
+  );
 }
