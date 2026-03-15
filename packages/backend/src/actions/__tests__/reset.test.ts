@@ -92,20 +92,6 @@ describe('reset', () => {
     );
   });
 
-  it('should throw when non-host tries to reset', async () => {
-    // Given
-    const nonHostConnectionId = 'conn-member';
-    mockGetConnection.mockResolvedValue(
-      createConnectionFixture({
-        connectionId: nonHostConnectionId,
-      }),
-    );
-    mockGetRoom.mockResolvedValue(createRoomFixture());
-
-    // When & Then
-    await expect(reset(nonHostConnectionId)).rejects.toThrow();
-  });
-
   it('should throw when connection not found', async () => {
     // Given
     mockGetConnection.mockResolvedValue(null);

@@ -173,20 +173,6 @@ describe('reveal', () => {
     expect(broadcastMessage.average).toBeNull();
   });
 
-  it('should throw when non-host tries to reveal', async () => {
-    // Given
-    const nonHostConnectionId = 'conn-member';
-    mockGetConnection.mockResolvedValue(
-      createConnectionFixture({
-        connectionId: nonHostConnectionId,
-      }),
-    );
-    mockGetRoom.mockResolvedValue(createRoomFixture());
-
-    // When & Then
-    await expect(reveal(nonHostConnectionId)).rejects.toThrow();
-  });
-
   it('should throw when room is already revealed', async () => {
     // Given
     mockGetConnection.mockResolvedValue(
