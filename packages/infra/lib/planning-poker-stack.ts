@@ -8,10 +8,20 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import type { Construct } from 'constructs';
 
+interface PlanningPokerStackProps extends cdk.StackProps {
+  certificateArn?: string;
+  domainName?: string;
+  hostedZoneName?: string;
+  webAclArn?: string;
+}
+
 export class PlanningPokerStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: PlanningPokerStackProps = {}) {
     super(scope, id, props);
 
     // --- DynamoDB ---
@@ -109,11 +119,19 @@ export class PlanningPokerStack extends cdk.Stack {
       autoDeleteObjects: true,
     });
 
+    // --- カスタムドメイン（オプション） ---
+    const certificate = props.certificateArn
+      ? acm.Certificate.fromCertificateArn(this, 'Certificate', props.certificateArn)
+      : undefined;
+
     const distribution = new cloudfront.Distribution(this, 'Distribution', {
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(websiteBucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
+      ...(props.domainName && { domainNames: [props.domainName] }),
+      ...(certificate && { certificate }),
+      ...(props.webAclArn && { webAclId: props.webAclArn }),
       defaultRootObject: 'index.html',
       errorResponses: [
         {
@@ -128,6 +146,18 @@ export class PlanningPokerStack extends cdk.Stack {
         },
       ],
     });
+
+    // Route 53 レコード
+    if (props.domainName && props.hostedZoneName) {
+      const hostedZone = route53.HostedZone.fromLookup(this, 'HostedZone', {
+        domainName: props.hostedZoneName,
+      });
+      new route53.ARecord(this, 'AliasRecord', {
+        zone: hostedZone,
+        recordName: props.domainName,
+        target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(distribution)),
+      });
+    }
 
     new s3deploy.BucketDeployment(this, 'DeployWebsite', {
       sources: [

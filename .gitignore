@@ -6,3 +6,4 @@ cdk.out/
 .DS_Store
 *.tsbuildinfo
 package-lock.json
+cdk.context.json
