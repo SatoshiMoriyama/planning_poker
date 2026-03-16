@@ -16,7 +16,6 @@ export type RoomStatus = 'voting' | 'revealed';
 
 export interface Room {
   roomId: string;
-  hostConnectionId: string;
   status: RoomStatus;
   participants: Record<string, Participant>;
   ttl: number;

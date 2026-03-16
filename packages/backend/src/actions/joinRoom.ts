@@ -61,7 +61,6 @@ export async function joinRoom(
     you: {
       connectionId,
       userName,
-      isHost: false,
     },
   });
 }

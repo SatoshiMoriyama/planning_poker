@@ -26,7 +26,6 @@ function createRoomFixture(
 ) {
   return {
     roomId: 'room-1',
-    hostConnectionId: 'conn-host',
     status: 'voting' as const,
     participants,
     ttl: Math.floor(Date.now() / 1000) + 86400,

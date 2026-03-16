@@ -24,7 +24,6 @@ describe('requireConnectionAndRoom', () => {
     };
     const room = {
       roomId: 'room-1',
-      hostConnectionId: 'conn-host',
       status: 'voting' as const,
       participants: {},
       ttl: 9999,

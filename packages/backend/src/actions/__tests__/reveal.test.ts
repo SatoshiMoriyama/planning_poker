@@ -18,9 +18,9 @@ function createConnectionFixture(
   overrides: Record<string, unknown> = {},
 ) {
   return {
-    connectionId: 'conn-host',
+    connectionId: 'conn-creator',
     roomId: 'room-xyz',
-    userName: 'Host',
+    userName: 'Creator',
     ttl: Math.floor(Date.now() / 1000) + 9000,
     ...overrides,
   };
@@ -31,12 +31,11 @@ function createRoomFixture(
 ) {
   return {
     roomId: 'room-xyz',
-    hostConnectionId: 'conn-host',
     status: 'voting' as const,
     participants: {
-      'conn-host': {
-        connectionId: 'conn-host',
-        userName: 'Host',
+      'conn-creator': {
+        connectionId: 'conn-creator',
+        userName: 'Creator',
         vote: '5',
         hasVoted: true,
       },
@@ -53,7 +52,7 @@ function createRoomFixture(
 }
 
 describe('reveal', () => {
-  const hostConnectionId = 'conn-host';
+  const connectionId = 'conn-creator';
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -69,7 +68,7 @@ describe('reveal', () => {
     mockGetRoom.mockResolvedValue(createRoomFixture());
 
     // When
-    await reveal(hostConnectionId);
+    await reveal(connectionId);
 
     // Then
     expect(mockUpdateStatus).toHaveBeenCalledWith(
@@ -86,7 +85,7 @@ describe('reveal', () => {
     mockGetRoom.mockResolvedValue(createRoomFixture());
 
     // When
-    await reveal(hostConnectionId);
+    await reveal(connectionId);
 
     // Then
     expect(mockBroadcastToRoom).toHaveBeenCalledWith(
@@ -94,7 +93,7 @@ describe('reveal', () => {
       expect.objectContaining({
         type: 'revealed',
         participants: expect.arrayContaining([
-          expect.objectContaining({ userName: 'Host', vote: '5' }),
+          expect.objectContaining({ userName: 'Creator', vote: '5' }),
           expect.objectContaining({
             userName: 'Member',
             vote: '8',
@@ -112,9 +111,9 @@ describe('reveal', () => {
     );
     const room = createRoomFixture({
       participants: {
-        'conn-host': {
-          connectionId: 'conn-host',
-          userName: 'Host',
+        'conn-creator': {
+          connectionId: 'conn-creator',
+          userName: 'Creator',
           vote: '3',
           hasVoted: true,
         },
@@ -135,7 +134,7 @@ describe('reveal', () => {
     mockGetRoom.mockResolvedValue(room);
 
     // When
-    await reveal(hostConnectionId);
+    await reveal(connectionId);
 
     // Then
     const broadcastMessage =
@@ -152,9 +151,9 @@ describe('reveal', () => {
     );
     const room = createRoomFixture({
       participants: {
-        'conn-host': {
-          connectionId: 'conn-host',
-          userName: 'Host',
+        'conn-creator': {
+          connectionId: 'conn-creator',
+          userName: 'Creator',
           vote: '?',
           hasVoted: true,
         },
@@ -163,7 +162,7 @@ describe('reveal', () => {
     mockGetRoom.mockResolvedValue(room);
 
     // When
-    await reveal(hostConnectionId);
+    await reveal(connectionId);
 
     // Then
     const broadcastMessage =
@@ -183,6 +182,6 @@ describe('reveal', () => {
     );
 
     // When & Then
-    await expect(reveal(hostConnectionId)).rejects.toThrow();
+    await expect(reveal(connectionId)).rejects.toThrow();
   });
 });

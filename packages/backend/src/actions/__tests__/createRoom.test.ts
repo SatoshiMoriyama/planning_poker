@@ -39,7 +39,7 @@ describe('createRoom', () => {
     expect(savedConnection.roomId.length).toBeGreaterThan(0);
   });
 
-  it('should create room with host as first participant', async () => {
+  it('should create room with creator as first participant', async () => {
     // When
     await createRoom(connectionId, userName);
 
@@ -47,9 +47,9 @@ describe('createRoom', () => {
     expect(mockCreateRoomInDb).toHaveBeenCalledOnce();
     const createdRoom = mockCreateRoomInDb.mock.calls[0][0];
     expect(createdRoom).toMatchObject({
-      hostConnectionId: connectionId,
       status: 'voting',
     });
+    expect(createdRoom).not.toHaveProperty('hostConnectionId');
     expect(createdRoom.roomId).toEqual(expect.any(String));
     expect(createdRoom.participants).toHaveProperty(connectionId);
     expect(createdRoom.participants[connectionId]).toMatchObject({
@@ -74,10 +74,13 @@ describe('createRoom', () => {
         you: expect.objectContaining({
           connectionId,
           userName,
-          isHost: true,
         }),
       }),
     );
+    const sentMessage = mockSendToConnection.mock.calls[0][1] as {
+      you: Record<string, unknown>;
+    };
+    expect(sentMessage.you).not.toHaveProperty('isHost');
   });
 
   it('should generate a unique roomId', async () => {
