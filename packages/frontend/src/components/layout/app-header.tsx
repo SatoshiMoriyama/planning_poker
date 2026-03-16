@@ -12,7 +12,7 @@ export function AppHeader({ center, right }: AppHeaderProps) {
     <header className="border-b border-border px-6 py-3">
       <div className="mx-auto flex max-w-4xl items-center">
         <div className="flex-1">
-          <Link to="/" className="text-lg font-bold hover:opacity-80">
+          <Link to="/" className="text-lg font-bold hover:text-foreground">
             {APP_NAME}
           </Link>
         </div>
