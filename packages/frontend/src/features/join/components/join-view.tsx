@@ -1,4 +1,8 @@
 import { type FormEvent, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 interface JoinViewProps {
   roomId: string;
@@ -16,31 +20,31 @@ export function JoinView({ roomId, onSubmit }: JoinViewProps) {
   }
 
   return (
-    <div className="max-w-md mx-auto p-8 space-y-6">
-      <h1 className="text-2xl font-bold text-center">ルームに参加</h1>
-      <p className="text-center text-gray-600">
-        ルーム: <span>{roomId}</span>
-      </p>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="join-userName" className="block text-sm font-medium text-gray-700">
-            ユーザー名
-          </label>
-          <input
-            id="join-userName"
-            type="text"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
-        >
-          参加
-        </button>
-      </form>
+    <div className="max-w-md mx-auto p-8">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-center">ルームに参加</CardTitle>
+          <p className="text-center text-muted-foreground">
+            ルーム: <span>{roomId}</span>
+          </p>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="join-userName">ユーザー名</Label>
+              <Input
+                id="join-userName"
+                type="text"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+              />
+            </div>
+            <Button type="submit" className="w-full">
+              参加
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
