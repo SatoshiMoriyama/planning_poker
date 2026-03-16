@@ -5,3 +5,4 @@ cdk.out/
 .env.*
 .DS_Store
 *.tsbuildinfo
+package-lock.json
