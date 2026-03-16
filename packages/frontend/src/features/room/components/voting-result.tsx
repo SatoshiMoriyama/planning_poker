@@ -30,9 +30,10 @@ function getSpreadInfo(participants: RevealedParticipant[]) {
 
   const min = Math.min(...numericVotes);
   const max = Math.max(...numericVotes);
-  const allSame = min === max;
+  const uniqueCount = new Set(numericVotes).size;
+  const allSame = uniqueCount === 1;
 
-  return { min, max, allSame };
+  return { min, max, allSame, uniqueCount };
 }
 
 export function VotingResult({ participants, average }: VotingResultProps) {
@@ -55,7 +56,7 @@ export function VotingResult({ participants, average }: VotingResultProps) {
             ) : (
               <>
                 <span className="text-sm text-muted-foreground">
-                  範囲: {spread.min} 〜 {spread.max}
+                  範囲: {spread.min} 〜 {spread.max}（{spread.uniqueCount}種類）
                 </span>
                 <Badge variant="destructive">⚠ 意見が分かれています</Badge>
               </>
