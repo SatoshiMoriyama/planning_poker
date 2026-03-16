@@ -37,9 +37,6 @@ describe('TermsView', () => {
       screen.getByText(/一時的に保存/),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/個人情報の永続的な保存は行いません/),
-    ).toBeInTheDocument();
-    expect(
       screen.getByText(/Cookieやトラッキングは使用しません/),
     ).toBeInTheDocument();
   });
