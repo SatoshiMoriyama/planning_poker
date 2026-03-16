@@ -85,6 +85,8 @@ function createInitialState(roomId: string): RoomState {
   };
 }
 
+const REVOTE_MESSAGE_DURATION_MS = 2000;
+
 export function RoomView({ roomId, wsUrl, userName, mode, onConnectionStatusChange }: RoomViewProps) {
   const navigate = useNavigate();
   const { status: wsStatus, lastMessage, error: wsError, connect, send } = useWebSocket(wsUrl);
@@ -94,8 +96,28 @@ export function RoomView({ roomId, wsUrl, userName, mode, onConnectionStatusChan
   }, [wsStatus, onConnectionStatusChange]);
   const [state, dispatch] = useReducer(viewReducer, roomId, createInitialState);
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const [isRevote, setIsRevote] = useState(false);
+  const [voteMessage, setVoteMessage] = useState<string | null>(null);
   // roomCreated後のnavigate→useEffect再発火で二重送信されるのを防止
   const hasSentRef = useRef(false);
+  const revoteTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearRevoteState = useCallback(() => {
+    setIsRevote(false);
+    setVoteMessage(null);
+    if (revoteTimerRef.current !== null) {
+      clearTimeout(revoteTimerRef.current);
+      revoteTimerRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (revoteTimerRef.current !== null) {
+        clearTimeout(revoteTimerRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     connect();
@@ -131,17 +153,30 @@ export function RoomView({ roomId, wsUrl, userName, mode, onConnectionStatusChan
       case 'reset':
         dispatch(msg);
         setSelectedCard(null);
+        clearRevoteState();
         break;
       case 'error':
         dispatch(msg);
         break;
     }
-  }, [lastMessage, navigate, userName]);
+  }, [lastMessage, navigate, userName, clearRevoteState]);
 
   const handleSelectCard = useCallback((value: string) => {
+    const hadPreviousVote = selectedCard !== null;
     setSelectedCard(value);
     send({ action: 'vote', cardValue: value });
-  }, [send]);
+
+    if (hadPreviousVote) {
+      setIsRevote(true);
+      setVoteMessage('投票を変更しました');
+      if (revoteTimerRef.current !== null) {
+        clearTimeout(revoteTimerRef.current);
+      }
+      revoteTimerRef.current = setTimeout(() => {
+        clearRevoteState();
+      }, REVOTE_MESSAGE_DURATION_MS);
+    }
+  }, [send, selectedCard, clearRevoteState]);
 
   const handleReveal = useCallback(() => {
     send({ action: 'reveal' });
@@ -150,7 +185,8 @@ export function RoomView({ roomId, wsUrl, userName, mode, onConnectionStatusChan
   const handleReset = useCallback(() => {
     send({ action: 'reset' });
     setSelectedCard(null);
-  }, [send]);
+    clearRevoteState();
+  }, [send, clearRevoteState]);
 
   const participantsArray = Array.from(state.participants.values());
 
@@ -179,7 +215,13 @@ export function RoomView({ roomId, wsUrl, userName, mode, onConnectionStatusChan
           onSelect={handleSelectCard}
           disabled={state.status === 'revealed'}
           selectedCard={selectedCard}
+          isRevote={isRevote}
         />
+        {voteMessage !== null && (
+          <p className="mt-2 text-sm text-primary animate-in fade-in" role="status">
+            {voteMessage}
+          </p>
+        )}
       </section>
 
       <section>
