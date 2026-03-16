@@ -24,7 +24,6 @@ export async function createRoom(
 
   await createRoomInDb({
     roomId,
-    hostConnectionId: connectionId,
     status: 'voting',
     participants: {
       [connectionId]: {
@@ -43,7 +42,6 @@ export async function createRoom(
     you: {
       connectionId,
       userName,
-      isHost: true,
     },
   });
 }

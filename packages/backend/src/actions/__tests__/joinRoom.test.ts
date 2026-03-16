@@ -23,12 +23,11 @@ function createRoomFixture(
 ) {
   return {
     roomId: 'room-xyz',
-    hostConnectionId: 'conn-host',
     status: 'voting' as const,
     participants: {
-      'conn-host': {
-        connectionId: 'conn-host',
-        userName: 'Host',
+      'conn-creator': {
+        connectionId: 'conn-creator',
+        userName: 'Creator',
         vote: null,
         hasVoted: false,
       },
@@ -126,10 +125,13 @@ describe('joinRoom', () => {
         you: expect.objectContaining({
           connectionId,
           userName,
-          isHost: false,
         }),
       }),
     );
+    const sentMessage = mockSendToConnection.mock.calls[0][1] as {
+      you: Record<string, unknown>;
+    };
+    expect(sentMessage.you).not.toHaveProperty('isHost');
   });
 
   it('should throw when room does not exist', async () => {

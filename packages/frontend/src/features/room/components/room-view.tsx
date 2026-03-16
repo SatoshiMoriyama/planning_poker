@@ -38,7 +38,6 @@ function viewReducer(state: RoomState, action: ViewAction): RoomState {
       participants,
       myConnectionId: action.you.connectionId,
       myUserName: action.you.userName,
-      isHost: action.you.isHost,
       average: null,
     };
   }
@@ -66,7 +65,6 @@ function viewReducer(state: RoomState, action: ViewAction): RoomState {
       participants,
       myConnectionId: action.you.connectionId,
       myUserName: action.you.userName,
-      isHost: action.you.isHost,
       average: null,
     };
   }
@@ -80,7 +78,6 @@ function createInitialState(roomId: string): RoomState {
     participants: new Map<string, ParticipantState>(),
     myConnectionId: '',
     myUserName: '',
-    isHost: false,
     average: null,
   };
 }

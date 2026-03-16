@@ -6,11 +6,10 @@ function createInitialState(overrides: Partial<RoomState> = {}): RoomState {
     roomId: 'room-abc',
     status: 'voting',
     participants: new Map([
-      ['conn-host', { connectionId: 'conn-host', userName: 'Host', hasVoted: false, vote: null }],
+      ['conn-creator', { connectionId: 'conn-creator', userName: 'Creator', hasVoted: false, vote: null }],
     ]),
-    myConnectionId: 'conn-host',
-    myUserName: 'Host',
-    isHost: true,
+    myConnectionId: 'conn-creator',
+    myUserName: 'Creator',
     average: null,
     ...overrides,
   };
@@ -60,7 +59,7 @@ describe('roomReducer', () => {
       // Given
       const state = createInitialState({
         participants: new Map([
-          ['conn-host', { connectionId: 'conn-host', userName: 'Host', hasVoted: false, vote: null }],
+          ['conn-creator', { connectionId: 'conn-creator', userName: 'Creator', hasVoted: false, vote: null }],
           ['conn-alice', { connectionId: 'conn-alice', userName: 'Alice', hasVoted: false, vote: null }],
         ]),
       });
@@ -98,14 +97,14 @@ describe('roomReducer', () => {
       // Given
       const state = createInitialState({
         participants: new Map([
-          ['conn-host', { connectionId: 'conn-host', userName: 'Host', hasVoted: false, vote: null }],
+          ['conn-creator', { connectionId: 'conn-creator', userName: 'Creator', hasVoted: false, vote: null }],
           ['conn-alice', { connectionId: 'conn-alice', userName: 'Alice', hasVoted: false, vote: null }],
         ]),
       });
       const action: RoomAction = {
         type: 'voteUpdate',
         participants: [
-          { connectionId: 'conn-host', userName: 'Host', hasVoted: true },
+          { connectionId: 'conn-creator', userName: 'Creator', hasVoted: true },
           { connectionId: 'conn-alice', userName: 'Alice', hasVoted: false },
         ],
       };
@@ -114,7 +113,7 @@ describe('roomReducer', () => {
       const next = roomReducer(state, action);
 
       // Then
-      expect(next.participants.get('conn-host')?.hasVoted).toBe(true);
+      expect(next.participants.get('conn-creator')?.hasVoted).toBe(true);
       expect(next.participants.get('conn-alice')?.hasVoted).toBe(false);
     });
 
@@ -124,7 +123,7 @@ describe('roomReducer', () => {
       const action: RoomAction = {
         type: 'voteUpdate',
         participants: [
-          { connectionId: 'conn-host', userName: 'Host', hasVoted: true },
+          { connectionId: 'conn-creator', userName: 'Creator', hasVoted: true },
         ],
       };
 
@@ -143,7 +142,7 @@ describe('roomReducer', () => {
       const action: RoomAction = {
         type: 'revealed',
         participants: [
-          { connectionId: 'conn-host', userName: 'Host', vote: '5' },
+          { connectionId: 'conn-creator', userName: 'Creator', vote: '5' },
         ],
         average: 5,
       };
@@ -159,14 +158,14 @@ describe('roomReducer', () => {
       // Given
       const state = createInitialState({
         participants: new Map([
-          ['conn-host', { connectionId: 'conn-host', userName: 'Host', hasVoted: true, vote: null }],
+          ['conn-creator', { connectionId: 'conn-creator', userName: 'Creator', hasVoted: true, vote: null }],
           ['conn-alice', { connectionId: 'conn-alice', userName: 'Alice', hasVoted: true, vote: null }],
         ]),
       });
       const action: RoomAction = {
         type: 'revealed',
         participants: [
-          { connectionId: 'conn-host', userName: 'Host', vote: '5' },
+          { connectionId: 'conn-creator', userName: 'Creator', vote: '5' },
           { connectionId: 'conn-alice', userName: 'Alice', vote: '8' },
         ],
         average: 6.5,
@@ -176,7 +175,7 @@ describe('roomReducer', () => {
       const next = roomReducer(state, action);
 
       // Then
-      expect(next.participants.get('conn-host')?.vote).toBe('5');
+      expect(next.participants.get('conn-creator')?.vote).toBe('5');
       expect(next.participants.get('conn-alice')?.vote).toBe('8');
     });
 
@@ -186,7 +185,7 @@ describe('roomReducer', () => {
       const action: RoomAction = {
         type: 'revealed',
         participants: [
-          { connectionId: 'conn-host', userName: 'Host', vote: '5' },
+          { connectionId: 'conn-creator', userName: 'Creator', vote: '5' },
         ],
         average: 5,
       };
@@ -204,7 +203,7 @@ describe('roomReducer', () => {
       const action: RoomAction = {
         type: 'revealed',
         participants: [
-          { connectionId: 'conn-host', userName: 'Host', vote: '?' },
+          { connectionId: 'conn-creator', userName: 'Creator', vote: '?' },
         ],
         average: null,
       };
@@ -235,7 +234,7 @@ describe('roomReducer', () => {
       const state = createInitialState({
         status: 'revealed',
         participants: new Map([
-          ['conn-host', { connectionId: 'conn-host', userName: 'Host', hasVoted: true, vote: '5' }],
+          ['conn-creator', { connectionId: 'conn-creator', userName: 'Creator', hasVoted: true, vote: '5' }],
           ['conn-alice', { connectionId: 'conn-alice', userName: 'Alice', hasVoted: true, vote: '8' }],
         ]),
       });
@@ -268,7 +267,7 @@ describe('roomReducer', () => {
       const state = createInitialState({
         status: 'revealed',
         participants: new Map([
-          ['conn-host', { connectionId: 'conn-host', userName: 'Host', hasVoted: true, vote: '5' }],
+          ['conn-creator', { connectionId: 'conn-creator', userName: 'Creator', hasVoted: true, vote: '5' }],
           ['conn-alice', { connectionId: 'conn-alice', userName: 'Alice', hasVoted: true, vote: '8' }],
         ]),
       });
@@ -279,7 +278,7 @@ describe('roomReducer', () => {
 
       // Then
       expect(next.participants.size).toBe(2);
-      expect(next.participants.has('conn-host')).toBe(true);
+      expect(next.participants.has('conn-creator')).toBe(true);
       expect(next.participants.has('conn-alice')).toBe(true);
     });
   });
@@ -298,6 +297,16 @@ describe('roomReducer', () => {
 
       // Then
       expect(next).toEqual(state);
+    });
+  });
+
+  describe('host concept removal', () => {
+    it('should not have isHost in RoomState', () => {
+      // Given
+      const state = createInitialState();
+
+      // Then
+      expect(state).not.toHaveProperty('isHost');
     });
   });
 });

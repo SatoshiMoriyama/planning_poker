@@ -33,12 +33,11 @@ function createRoomFixture(
 ) {
   return {
     roomId: 'room-xyz',
-    hostConnectionId: 'conn-host',
     status: 'voting' as const,
     participants: {
-      'conn-host': {
-        connectionId: 'conn-host',
-        userName: 'Host',
+      'conn-creator': {
+        connectionId: 'conn-creator',
+        userName: 'Creator',
         vote: null,
         hasVoted: false,
       },

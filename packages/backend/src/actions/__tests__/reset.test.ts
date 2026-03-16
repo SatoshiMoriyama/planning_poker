@@ -18,9 +18,9 @@ function createConnectionFixture(
   overrides: Record<string, unknown> = {},
 ) {
   return {
-    connectionId: 'conn-host',
+    connectionId: 'conn-creator',
     roomId: 'room-xyz',
-    userName: 'Host',
+    userName: 'Creator',
     ttl: Math.floor(Date.now() / 1000) + 9000,
     ...overrides,
   };
@@ -31,12 +31,11 @@ function createRoomFixture(
 ) {
   return {
     roomId: 'room-xyz',
-    hostConnectionId: 'conn-host',
     status: 'revealed' as const,
     participants: {
-      'conn-host': {
-        connectionId: 'conn-host',
-        userName: 'Host',
+      'conn-creator': {
+        connectionId: 'conn-creator',
+        userName: 'Creator',
         vote: '5',
         hasVoted: true,
       },
@@ -53,7 +52,7 @@ function createRoomFixture(
 }
 
 describe('reset', () => {
-  const hostConnectionId = 'conn-host';
+  const connectionId = 'conn-creator';
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -69,7 +68,7 @@ describe('reset', () => {
     mockGetRoom.mockResolvedValue(createRoomFixture());
 
     // When
-    await reset(hostConnectionId);
+    await reset(connectionId);
 
     // Then
     expect(mockResetVotes).toHaveBeenCalledWith('room-xyz');
@@ -83,7 +82,7 @@ describe('reset', () => {
     mockGetRoom.mockResolvedValue(createRoomFixture());
 
     // When
-    await reset(hostConnectionId);
+    await reset(connectionId);
 
     // Then
     expect(mockBroadcastToRoom).toHaveBeenCalledWith(
@@ -97,6 +96,6 @@ describe('reset', () => {
     mockGetConnection.mockResolvedValue(null);
 
     // When & Then
-    await expect(reset(hostConnectionId)).rejects.toThrow();
+    await expect(reset(connectionId)).rejects.toThrow();
   });
 });

@@ -13,7 +13,6 @@ export interface RoomState {
   participants: Map<string, ParticipantState>;
   myConnectionId: string;
   myUserName: string;
-  isHost: boolean;
   average: number | null;
 }
 

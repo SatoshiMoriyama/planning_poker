@@ -15,7 +15,6 @@ export interface RevealedParticipant {
 export interface YouInfo {
   connectionId: string;
   userName: string;
-  isHost: boolean;
 }
 
 export type ClientMessage =
