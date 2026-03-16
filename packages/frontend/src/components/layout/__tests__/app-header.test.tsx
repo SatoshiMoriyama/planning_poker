@@ -1,12 +1,18 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import type { ReactNode } from 'react';
 import { AppHeader } from '../app-header';
 import { APP_NAME } from '../constants';
+
+function renderWithRouter(ui: ReactNode) {
+  return render(<MemoryRouter>{ui}</MemoryRouter>);
+}
 
 describe('AppHeader', () => {
   it('should display the app name', () => {
     // Given / When
-    render(<AppHeader />);
+    renderWithRouter(<AppHeader />);
 
     // Then
     expect(screen.getByText(APP_NAME)).toBeInTheDocument();
@@ -14,7 +20,7 @@ describe('AppHeader', () => {
 
   it('should render as a banner element', () => {
     // Given / When
-    render(<AppHeader />);
+    renderWithRouter(<AppHeader />);
 
     // Then
     expect(screen.getByRole('banner')).toBeInTheDocument();
@@ -22,7 +28,7 @@ describe('AppHeader', () => {
 
   it('should render center slot when provided', () => {
     // Given / When
-    render(<AppHeader center={<span>Center Content</span>} />);
+    renderWithRouter(<AppHeader center={<span>Center Content</span>} />);
 
     // Then
     expect(screen.getByText('Center Content')).toBeInTheDocument();
@@ -30,7 +36,7 @@ describe('AppHeader', () => {
 
   it('should render right slot when provided', () => {
     // Given / When
-    render(<AppHeader right={<span>Right Content</span>} />);
+    renderWithRouter(<AppHeader right={<span>Right Content</span>} />);
 
     // Then
     expect(screen.getByText('Right Content')).toBeInTheDocument();
@@ -38,7 +44,7 @@ describe('AppHeader', () => {
 
   it('should not render center area when center is not provided', () => {
     // Given / When
-    render(<AppHeader />);
+    renderWithRouter(<AppHeader />);
 
     // Then
     const banner = screen.getByRole('banner');
