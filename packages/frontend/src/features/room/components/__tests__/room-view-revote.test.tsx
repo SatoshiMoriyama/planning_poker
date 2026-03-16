@@ -49,7 +49,7 @@ describe('RoomView revote behavior', () => {
       roomId: 'room-1',
       status: 'voting',
       participants: [],
-      you: { connectionId: 'conn-1', userName: 'テスト太郎', isHost: true },
+      you: { connectionId: 'conn-1', userName: 'テスト太郎' },
     };
     return render(<RoomView {...defaultProps} />);
   }
